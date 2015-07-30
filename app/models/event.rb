@@ -250,13 +250,6 @@ class Event < ActiveRecord::Base
     rsvps.where(user_id: user.id, checkiner: true).any?
   end
 
-  def dietary_restrictions_totals
-    diets = rsvps.confirmed.includes(:dietary_restrictions).map(&:dietary_restrictions).flatten
-    restrictions = diets.group_by(&:restriction)
-    restrictions.each { |name, diet| restrictions[name] = diet.length }
-    restrictions
-  end
-
   def other_dietary_restrictions
     rsvps.confirmed.map { |rsvp| rsvp.dietary_info.presence }.compact
   end

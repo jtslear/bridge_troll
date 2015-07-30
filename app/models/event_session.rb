@@ -39,6 +39,14 @@ class EventSession < ActiveRecord::Base
     )
   end
 
+  def dietary_restrictions_totals
+    diets = rsvps.confirmed.includes(:dietary_restrictions).map(&:dietary_restrictions).flatten
+    restrictions = diets.group_by(&:restriction)
+    restrictions.each { |name, diet| restrictions[name] = diet.length }
+    restrictions
+  end
+
+
   def starts_at
     (event && event.persisted?) ? date_in_time_zone(:starts_at) : read_attribute(:starts_at)
   end

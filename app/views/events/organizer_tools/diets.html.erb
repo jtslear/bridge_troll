@@ -3,18 +3,27 @@
 
 <%= render :partial => 'shared/organizer_breadcrumb', locals: {current_page_title: 'Food Preferences'} %>
 <div class='food-preferences'>
-  <h2>Total Attendees: <%= @event.rsvps.confirmed.count %></h2>
-
   <h2>Dietary Restrictions Totals</h2>
-  <% totals = @event.dietary_restrictions_totals %>
-  <% DietaryRestriction::DIETS.each do |diet| %>
-    <h3><%= "#{diet.capitalize}: #{totals[diet] || 0}" %></h3>
-  <% end %>
+<div class='food-preferences'>
+<% sessions = @event.event_sessions %>
+<% sessions.each do |session| %>
+<tr>
+  <td>
+    <h2><%= session.name %></h2>
+    <h3>Total Attendees: <%= session.rsvps.confirmed.count %></h3>
+      <% totals = session.dietary_restrictions_totals %>
+      <% DietaryRestriction::DIETS.each do |diet| %>
+        <p><%= "#{diet.capitalize}: #{totals[diet] || 0}" %></p>
+      <% end %>
 
-  <h2>Other dietary restrictions:</h2>
-  <ul>
-  <% @event.other_dietary_restrictions.each do |other| %>
-    <li><%= other %></li>
-  <% end %> 
-  </ul>
+      <h3>Other dietary restrictions:</h3>
+      <ul>
+      <% @event.other_dietary_restrictions.each do |other| %>
+        <li><%= other %></li>
+      <% end %> 
+      </ul>
+    </div>
+  </td>
+</tr>
 </div>
+<% end %>
